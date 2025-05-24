@@ -1,6 +1,9 @@
 #include <allegro5/allegro.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
 
 void *timer(ALLEGRO_THREAD *ptr, void *arg);
 
@@ -11,6 +14,33 @@ bool timerComplete = false;
 
 int main()
 {
+
+	//Read dictionarty and assign words to difficulty level
+	std::vector<std::string> words4to5;
+	std::vector<std::string> words6to7;
+	std::vector<std::string> words8toInf;
+
+	std::string inputLine;
+	int inputLength;
+
+	std::ifstream inputFile("dictionary.txt");
+
+	while (getline(inputFile, inputLine)) {
+		inputLength = inputLine.length();
+		if (inputLength < 4) {
+			//Do nothing since words must be length 4 or more
+		}
+		else if (inputLength < 6) {
+			words4to5.push_back(inputLine);
+		}
+		else if (inputLength < 8) {
+			words6to7.push_back(inputLine);
+		}
+		else {
+			words8toInf.push_back(inputLine);
+		}
+	}
+
 	ALLEGRO_THREAD *thread1 = NULL, *thread2 = NULL;
 
 	thread1 = al_create_thread(timer, NULL);
