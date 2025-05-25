@@ -13,6 +13,7 @@ std::string scramble(std::string word);
 
 bool gameComplete = false;
 bool timerComplete = false;
+int level;
 
 int main()
 {
@@ -63,6 +64,24 @@ int main()
 			al_destroy_thread(gameThread);
 		}
 	}
+
+	//Give game over message based on how many levels player completed.
+	if (level < 2) {
+		std::cout << "\nLess than 2 message.\n";
+	}
+	if (level == 2) {
+		std::cout << "\nequals 2 message.\n";
+	}
+	if (level == 3) {
+		std::cout << "\nequals 3 message.\n";
+	}
+	if (level == 4) {
+		std::cout << "\nequals 4 message.\n";
+	}
+	if (level == 5) {
+		std::cout << "\nequals 5 message.\n";
+	}
+	std::cout << level << "\n";
 }
 
 void *timer(ALLEGRO_THREAD *ptr, void *arg) {
@@ -84,8 +103,8 @@ void *guessGame(ALLEGRO_THREAD *ptr, void *arg) {
 	std::string guess;
 	std::vector<std::string> *words = static_cast<std::vector<std::string>*>(arg);
 	int randIndex;
-
-	int level = 0;
+	
+	level = 0;
 	srand(time(0));
 
 	while (level < 5) {
