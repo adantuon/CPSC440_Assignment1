@@ -67,6 +67,7 @@ int main()
 	timerThread = al_create_thread(timer, NULL);
 	gameThread = al_create_thread(guessGame, words);
 
+	std::cout << "Unscramble words to win!\n";
 	while (!gameComplete && !timerComplete) {
 		if (!gameComplete && !timerComplete) {
 			al_start_thread(timerThread);
@@ -94,7 +95,7 @@ int main()
 		std::cout << "\nGame Over\nYou unscrambled 4 words.\nYou're super smart!\n";
 	}
 	if (level == 5) {
-		std::cout << "\neGame Over\nYou unscrambled all 5 word.\nYou're the smartest person ever!\n";
+		std::cout << "\nGame Over\nYou unscrambled all 5 word.\nYou're the smartest person ever!\n";
 	}
 }
 
