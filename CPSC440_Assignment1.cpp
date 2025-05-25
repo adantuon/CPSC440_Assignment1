@@ -67,21 +67,20 @@ int main()
 
 	//Give game over message based on how many levels player completed.
 	if (level < 2) {
-		std::cout << "\nLess than 2 message.\n";
+		std::cout << "\nGame Over\nTry better next time.\n";
 	}
 	if (level == 2) {
-		std::cout << "\nequals 2 message.\n";
+		std::cout << "\nGame Over\nYou unscrambled 2 words.\nYou are of average intelligence.";
 	}
 	if (level == 3) {
-		std::cout << "\nequals 3 message.\n";
+		std::cout << "\nGame Over\nYou unscrambled 3 words.\nYou're pretty smart!\n";
 	}
 	if (level == 4) {
-		std::cout << "\nequals 4 message.\n";
+		std::cout << "\nGame Over\nYou unscrambled 4 words.\nYou're super smart!\n";
 	}
 	if (level == 5) {
-		std::cout << "\nequals 5 message.\n";
+		std::cout << "\neGame Over\nYou unscrambled all 5 word.\nYou're the smartest person ever!\n";
 	}
-	std::cout << level << "\n";
 }
 
 void *timer(ALLEGRO_THREAD *ptr, void *arg) {
