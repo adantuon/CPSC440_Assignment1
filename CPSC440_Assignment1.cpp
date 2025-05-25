@@ -130,8 +130,11 @@ void *guessGame(ALLEGRO_THREAD *ptr, void *arg) {
 			words[2].erase(words[2].begin() + randIndex);
 		}
 
-		//TO DO: scramble the word
-		scrambled = scramble(unscrambled);
+		//scramble the word and ensure that don't scramble into the same word
+		scrambled = unscrambled;
+		while (scrambled.compare(unscrambled) == 0) {
+			scrambled = scramble(unscrambled);
+		}
 
 		std::cout << scrambled << "\n";
 		//Allow player to guess word
