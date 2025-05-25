@@ -9,6 +9,8 @@ void *timer(ALLEGRO_THREAD *ptr, void *arg);
 
 void *guessGame(ALLEGRO_THREAD *ptr, void *arg);
 
+std::string scramble(std::string word);
+
 bool gameComplete = false;
 bool timerComplete = false;
 
@@ -111,7 +113,7 @@ void *guessGame(ALLEGRO_THREAD *ptr, void *arg) {
 		}
 
 		//TO DO: scramble the word
-		scrambled = unscrambled;
+		scrambled = scramble(unscrambled);
 
 		std::cout << scrambled << "\n";
 		//Allow player to guess word
@@ -132,4 +134,20 @@ void *guessGame(ALLEGRO_THREAD *ptr, void *arg) {
 	gameComplete = true;
 
 	return(NULL);
+}
+
+std::string scramble(std::string word) {
+	int length = word.length();
+	int randIndex;
+	char tmpChar;
+
+	for (int i = length - 1; i >= 1; i--) {
+		randIndex = rand() % (i + 1);
+		tmpChar = word[i];
+		word[i] = word[randIndex];
+		word[randIndex] = tmpChar;
+	}
+
+	return(word);
+
 }
