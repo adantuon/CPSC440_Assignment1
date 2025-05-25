@@ -5,10 +5,25 @@
 #include <string>
 #include <vector>
 
+/*
+* Keeps track of the amount of time since game start
+* sets timerComplete true once 60 seconds have passed
+*/
 void *timer(ALLEGRO_THREAD *ptr, void *arg);
 
+/*
+* Handles the running of the game
+* Once the game is complete sets gameComplete to true
+* Takes an array of vectors representing all the possible
+* words organized by difficulty level as input
+*/
 void *guessGame(ALLEGRO_THREAD *ptr, void *arg);
 
+/*
+* Scrambles word
+* Takes in a unscrambled word as input and returns
+* a scrambled version of the word.
+*/
 std::string scramble(std::string word);
 
 bool gameComplete = false;
@@ -83,6 +98,10 @@ int main()
 	}
 }
 
+/*
+* Keeps track of the amount of time since game start
+* makes timerComplete true once 60 seconds have passed
+*/
 void *timer(ALLEGRO_THREAD *ptr, void *arg) {
 	time_t startTime, currentTime;
 	startTime = time(NULL);
@@ -96,6 +115,12 @@ void *timer(ALLEGRO_THREAD *ptr, void *arg) {
 	return(NULL);
 }
 
+/*
+* Handles the running of the game
+* Once the game is complete sets gameComplete to true
+* Takes an array of vectors representing all the possible
+* words organized by difficulty level as input
+*/
 void *guessGame(ALLEGRO_THREAD *ptr, void *arg) {
 	std::string unscrambled;
 	std::string scrambled;
@@ -157,6 +182,11 @@ void *guessGame(ALLEGRO_THREAD *ptr, void *arg) {
 	return(NULL);
 }
 
+/*
+* Scrambles word
+* Takes in a unscrambled word as input and returns
+* a scrambled version of the word.
+*/
 std::string scramble(std::string word) {
 	int length = word.length();
 	int randIndex;
