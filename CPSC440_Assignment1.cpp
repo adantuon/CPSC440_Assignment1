@@ -7,7 +7,7 @@
 
 void *timer(ALLEGRO_THREAD *ptr, void *arg);
 
-void *playerInput(ALLEGRO_THREAD *ptr, void *arg);
+void *guessGame(ALLEGRO_THREAD *ptr, void *arg);
 
 bool gameComplete = false;
 bool timerComplete = false;
@@ -15,10 +15,13 @@ bool timerComplete = false;
 int main()
 {
 
-	//Read dictionarty and assign words to difficulty level
-	std::vector<std::string> words4to5;
-	std::vector<std::string> words6to7;
-	std::vector<std::string> words8toInf;
+	/*
+	* Read dictionary and assign words to difficulty level
+	* words[0] is for words of length 4-5
+	* words[1] is for length 6-7
+	* words[2] is for length 8+
+	*/
+	std::vector<std::string> words[3];
 
 	std::string inputLine;
 	int inputLength;
@@ -31,31 +34,31 @@ int main()
 			//Do nothing since words must be length 4 or more
 		}
 		else if (inputLength < 6) {
-			words4to5.push_back(inputLine);
+			words[0].push_back(inputLine);
 		}
 		else if (inputLength < 8) {
-			words6to7.push_back(inputLine);
+			words[1].push_back(inputLine);
 		}
 		else {
-			words8toInf.push_back(inputLine);
+			words[2].push_back(inputLine);
 		}
 	}
 
-	ALLEGRO_THREAD *thread1 = NULL, *thread2 = NULL;
+	ALLEGRO_THREAD *timerThread = NULL, *gameThread = NULL;
 
-	thread1 = al_create_thread(timer, NULL);
-	thread2 = al_create_thread(playerInput, NULL);
+	timerThread = al_create_thread(timer, NULL);
+	gameThread = al_create_thread(guessGame, words);
 
 	while (!gameComplete && !timerComplete) {
 		if (!gameComplete && !timerComplete) {
-			al_start_thread(thread1);
+			al_start_thread(timerThread);
 
-			al_start_thread(thread2);
+			al_start_thread(gameThread);
 		}
 		else {
-			al_destroy_thread(thread1);
+			al_destroy_thread(timerThread);
 
-			al_destroy_thread(thread2);
+			al_destroy_thread(gameThread);
 		}
 	}
 }
@@ -65,8 +68,7 @@ void *timer(ALLEGRO_THREAD *ptr, void *arg) {
 	startTime = time(NULL);
 	currentTime = time(NULL);
 
-	//TO DO: Change this to 60 seconds
-	while (currentTime - startTime < 5 && !gameComplete) {
+	while (currentTime - startTime < 60 && !gameComplete) {
 		currentTime = time(NULL);
 	}
 	gameComplete = true;
@@ -74,6 +76,60 @@ void *timer(ALLEGRO_THREAD *ptr, void *arg) {
 	return(NULL);
 }
 
-void *playerInput(ALLEGRO_THREAD *ptr, void *arg) {
-	return(0);
+void *guessGame(ALLEGRO_THREAD *ptr, void *arg) {
+	std::string unscrambled;
+	std::string scrambled;
+	std::string guess;
+	std::vector<std::string> *words = static_cast<std::vector<std::string>*>(arg);
+	int randIndex;
+
+	int level = 0;
+	srand(time(0));
+
+	while (level < 5) {
+		//get a random word based on current level
+		if (level < 2) {
+			randIndex = rand() % words[0].size();
+			unscrambled = words[0][randIndex];
+
+			//Remove word from list of possible words for future passes
+			words[0].erase(words[0].begin() + randIndex);
+		}
+		else if (level < 4) {
+			randIndex = rand() % words[1].size();
+			unscrambled = words[1][randIndex];
+
+			//Remove word from list of possible words for future passes
+			words[1].erase(words[1].begin() + randIndex);
+		}
+		else {
+			randIndex = rand() % words[2].size();
+			unscrambled = words[2][randIndex];
+
+			//Remove word from list of possible words for future passes
+			words[2].erase(words[2].begin() + randIndex);
+		}
+
+		//TO DO: scramble the word
+		scrambled = unscrambled;
+
+		std::cout << scrambled << "\n";
+		//Allow player to guess word
+		while (true) {
+			std::cin >> guess;
+
+			if (unscrambled.compare(guess) == 0) {
+				std::cout << "Correct!\n";
+				level++;
+				break;
+			}
+			else {
+				std::cout << "Incorrect, try again.\n";
+			}
+		}
+	}
+
+	gameComplete = true;
+
+	return(NULL);
 }
