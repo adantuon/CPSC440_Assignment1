@@ -111,7 +111,7 @@ void *timer(ALLEGRO_THREAD *ptr, void *arg) {
 	while (currentTime - startTime < 60 && !gameComplete) {
 		currentTime = time(NULL);
 	}
-	gameComplete = true;
+	timerComplete = true;
 
 	return(NULL);
 }
